@@ -1,0 +1,62 @@
+Vagrant.configure("2") do |config|
+    config.vm.define :alfa_rc do |alfa_rc|
+      alfa_rc.vm.box = "debian/bookworm64"
+      alfa_rc.vm.hostname = "alfa-rc"  
+      alfa_rc.vm.synced_folder ".", "/vagrant", disabled: true
+  
+      alfa_rc.vm.network :private_network,
+        :libvirt__network_name => "network_intra",
+        :libvirt__dhcp_enabled => false,
+        :ip => "192.168.100.1",
+        :libvirt__forward_mode => "veryisolated"
+
+    end
+  
+    config.vm.define :www do |www|
+      www.vm.box = "debian/bookworm64"
+      www.vm.hostname = "www"  
+      www.vm.synced_folder ".", "/vagrant", disabled: true
+  
+      www.vm.network :private_network,
+        :libvirt__network_name => "network_intra",
+        :libvirt__dhcp_enabled => false,
+        :ip => "192.168.100.2",
+        :libvirt__forward_mode => "veryisolated"
+  
+      www.vm.network :private_network,
+        :libvirt__network_name => "network_data",
+        :libvirt__dhcp_enabled => false,
+        :ip => "172.16.0.100",
+        :libvirt__forward_mode => "veryisolated"
+    end
+  
+    config.vm.define :bdatos do |bdatos|
+      bdatos.vm.box = "debian/bookworm64"
+      bdatos.vm.hostname = "bdatos"
+      bdatos.vm.synced_folder ".", "/vagrant", disabled: true
+  
+      bdatos.vm.network :private_network,
+        :libvirt__network_name => "network_intra",
+        :libvirt__dhcp_enabled => false,
+        :ip => "192.168.100.3",
+        :libvirt__forward_mode => "veryisolated"
+  
+      bdatos.vm.network :private_network,
+        :libvirt__network_name => "network_data",
+        :libvirt__dhcp_enabled => false,
+        :ip => "172.16.0.200",
+        :libvirt__forward_mode => "veryisolated"
+    end
+
+    config.vm.define :cliente_rc do |cliente_rc|
+      cliente_rc.vm.box = "debian/bookworm64"
+      cliente_rc.vm.hostname = "cliente-rc"
+      cliente_rc.vm.synced_folder ".", "/vagrant", disabled: true
+  
+      cliente_rc.vm.network :private_network,
+        :libvirt__network_name => "network_intra",
+        :libvirt__dhcp_enabled => false,
+        :ip => "192.168.100.4",
+        :libvirt__forward_mode => "veryisolated"
+    end
+ end

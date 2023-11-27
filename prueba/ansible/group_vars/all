@@ -1,0 +1,11 @@
+router_ip: 192.168.121.100
+web_ip: 192.168.121.225
+bd_ip: 192.168.121.155
+cliente_ip: 192.168.121.245
+ip_interna_local: 192.168.100.0
+ip_interna_router: 192.168.100.1
+ip_interna_web: 192.168.100.2
+ip_interna_bd: 192.168.100.3
+ip_reddatos_web: 172.16.0.100
+ip_reddatos_bd: 172.16.0.200
+mascara_larga: 255.255.255.0

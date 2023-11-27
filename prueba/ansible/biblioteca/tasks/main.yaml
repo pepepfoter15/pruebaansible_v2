@@ -1,0 +1,77 @@
+- name: "Instalar Apache2 y mysql_client"
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apache2
+    - mariadb-client
+    - libapache2-mod-php
+    - php 
+    - php-mysql
+
+- name: "Crear el virtualhost web"
+  template:
+    src: biblioteca.pepepfoter15.conf  
+    dest: /etc/apache2/sites-available/biblioteca.pepepfoter15.conf 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "Activar el virtualhost web"
+  file:
+    src: /etc/apache2/sites-available/biblioteca.pepepfoter15.conf  
+    dest: /etc/apache2/sites-enabled/biblioteca.pepepfoter15.conf 
+    state: link
+
+- name: "Crear el virtualhost db"
+  template:
+    src: bd-pepe.pepepfoter15.conf  
+    dest: /etc/apache2/sites-available/bd-pepe.pepepfoter15.conf 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: "Activar el virtualhost db"
+  file:
+    src: /etc/apache2/sites-available/bd-pepe.pepepfoter15.conf  
+    dest: /etc/apache2/sites-enabled/bd-pepe.pepepfoter15.conf 
+    state: link
+
+- name: "Crear un directorio (file, status: directory)"
+  file:
+    path: /var/www/html  
+    state: directory
+
+- name: "Activar el módulo rewriter (apache2_modules)"
+  apache2_module:
+    name: rewrite
+    state: present
+
+- name: "Copiar index.html"
+  copy:
+    src: /var/www/html/index.html  
+    dest: /var/www/html/index.html
+    owner: www-data
+    group: www-data
+    mode: '0644'
+
+- name: "Resolución estática web"
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ip_interna_web}} biblioteca.pepepfoter15.com'
+  become: yes
+
+- name: "Resolución estática bd"
+  lineinfile:
+    path: /etc/hosts
+    line: '{{ip_reddatos_bd}} bd-pepe.pepepfoter15.com'
+  become: yes
+
+- name: "Copiar fichero de configuración y reiniciar el servicio"
+  copy:
+    src: /etc/apache2/ports.conf
+    dest: /etc/apache2/ports.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart apache2

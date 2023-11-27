@@ -1,0 +1,26 @@
+- hosts: www, bdatos, cliente_rc
+  become: true
+  roles:
+    - role: redinterna
+
+- hosts: alfa_rc
+  become: true
+  roles:
+    - role: alfa_rc
+
+- hosts: all
+  become: true
+  roles:
+    - role: common
+
+- hosts: www
+  become: true
+  roles:
+    - role: www
+    - role: biblioteca
+
+- hosts: bdatos
+  become: true
+  roles:
+    - role: bdatos
+

@@ -1,0 +1,29 @@
+- name: "Install MariaDB"
+  apt:
+    pkg:
+      - mariadb-server
+      - python3-mysqldb
+
+- name: "Crear la base da datos"
+  mysql_db:
+    name: pepe
+    state: present
+
+- name: "Crear el usuario"
+  mysql_user:
+    name: pepe  
+    password: pepe  
+    priv: '*.*:ALL'
+    host: '%' 
+
+- name: "Configuramos el bind address"
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'  
+    state: present
+
+- name: "Reiniciamos el servicio de MariaDB "
+  service:
+    name: mariadb
+    state: restarted
